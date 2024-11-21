@@ -1,0 +1,62 @@
+@font-face {
+  font-family: Satoshi;
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300;
+  src: url(./assets/fonts/satoshi/SATOSHI-LIGHT.OTF) format('opentype');
+}
+
+@font-face {
+  font-family: Satoshi;
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(./assets/fonts/satoshi/SATOSHI-REGULAR.OTF) format('opentype');
+}
+
+@font-face {
+  font-family: Satoshi;
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(./assets/fonts/satoshi/SATOSHI-MEDIUM.OTF) format('opentype');
+}
+
+@font-face {
+  font-family: Satoshi;
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(./assets/fonts/satoshi/SATOSHI-BOLD.OTF) format('opentype');
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* SIDEBAR WRAPPER CSS */
+
+.logged-in-sidebar-wrapper
+  .MuiCollapse-wrapperInner
+  button.MuiButtonBase-root:before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 80px;
+  left: -16px;
+  top: -53px;
+  border-left: 3px solid #f1f2f4;
+  border-bottom: 3px solid #f1f2f4;
+  border-radius: 0 0 0 8px;
+  z-index: -1;
+}
+
+.logged-in-sidebar-wrapper
+  .MuiCollapse-wrapperInner
+  button.MuiButtonBase-root:first-child:before {
+  height: 65%;
+  top: -5px;
+}
+
+/* ----- */
