@@ -3,6 +3,11 @@ import { Logo, TextInput } from "../../../components";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext, IUserContext } from "../../../context/user-context";
+import {
+  MessageContext,
+  IMessageContext,
+} from "../../../context/message-context";
+import api from "../../../services/request";
 
 const Login = (): JSX.Element => {
   const navigate = useNavigate();
@@ -10,17 +15,34 @@ const Login = (): JSX.Element => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const { showSnackbar } = useContext(MessageContext) as IMessageContext;
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    setUserData({
-      _id: `1`,
-      name: "Admin",
-      email: "admin@abc.com",
-      userRole: "admin",
-      isActive: true,
-      profilePicURL: "",
-    });
+    // setUserData({
+    //   _id: `1`,
+    //   name: "Admin",
+    //   email: "admin@abc.com",
+    //   userRole: "admin",
+    //   isActive: true,
+    //   profilePicURL: "",
+    // });
+    // showSnackbar(`Welcome!`, "You are now logged in.", "success");
+
+    // navigate("/");
+    // api
+    //   .post("/login", { email, password })
+    //   .then((res) => {
+    //     const { data } = res;
+    //     setUserData(data);
+    //     navigate("/");
+    //   })
+    //   .catch((err) => {
+    //     console.log(err, "aaaaaaaaaaa");
+    //   });
+
+    await api.post("/api/auth/login", { email, password });
   };
 
   return (

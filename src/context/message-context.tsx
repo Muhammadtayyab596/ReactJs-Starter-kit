@@ -1,6 +1,21 @@
 import React, { useState } from "react";
+import { setGlobalShowSnackbar } from "./hooks";
 
-export const MessageContext = React.createContext({});
+export const MessageContext = React.createContext<IMessageContext>({
+  snackbarState: {
+    isSnackbarVisible: false,
+    snackBarMessage: "",
+    snackBarDescription: "",
+    variant: "info",
+    duration: 3000,
+  },
+  showSnackbar: () => {
+    throw new Error("showSnackbar called outside of MessageProvider");
+  },
+  hideSnackbar: () => {
+    throw new Error("hideSnackbar called outside of MessageProvider");
+  },
+});
 
 export const MessageConsumer = MessageContext.Consumer;
 export const MessageProvider = MessageContext.Provider;
@@ -29,18 +44,20 @@ export interface IMessageContext {
 export const MessageContainer = ({
   children,
 }: IMessageContainer): ReactNode => {
-  const [snackbarState, setSnackbarState] = useState({
+  const [snackbarState, setSnackbarState] = useState<
+    IMessageContext["snackbarState"]
+  >({
     isSnackbarVisible: false,
     snackBarMessage: "",
     snackBarDescription: "",
-    variant: "info",
+    variant: "info", // ✅ This now correctly matches the type
     duration: 3000,
   });
 
   const showSnackbar = (
     message: string,
     description: string,
-    variant = "info",
+    variant: "info" | "error" | "warning" | "success" = "info",
     duration = 3000
   ): void => {
     setSnackbarState({
@@ -61,6 +78,8 @@ export const MessageContainer = ({
       variant: "info",
     });
   };
+
+  setGlobalShowSnackbar(showSnackbar);
 
   return (
     <MessageProvider

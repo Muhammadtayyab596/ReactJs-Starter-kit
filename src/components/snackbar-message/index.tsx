@@ -12,7 +12,7 @@ import { IMessageContext, MessageContext } from "../../context/message-context";
 const SnackbarMessage = (): ReactNode => {
   const position: SnackbarOrigin = {
     vertical: "top",
-    horizontal: "right",
+    horizontal: "center",
   };
 
   const { snackbarState, hideSnackbar } = useContext(
