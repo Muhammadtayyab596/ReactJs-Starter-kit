@@ -12,6 +12,8 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@hookform/resolvers": "^4.1.3",
+    "@iconify/react": "^5.2.0",
     "@mui/icons-material": "^5.15.17",
     "@mui/material": "^5.15.17",
     "@reduxjs/toolkit": "^2.5.1",
@@ -19,11 +21,13 @@
     "moment": "^2.30.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.54.2",
     "react-icons": "^4.11.0",
     "react-perfect-scrollbar": "^1.5.8",
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.14.0",
-    "styled-components": "^6.1.11"
+    "styled-components": "^6.1.11",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",

@@ -14,8 +14,11 @@ const PrivateRoute = ({
   ...rest
 }: IPrivateRoute): ReactNode => {
   const { data } = useContext(UserContext) as IUserContext;
+  const token = localStorage.getItem("token");
 
-  if (data.user) {
+  console.log(token);
+
+  if (token) {
     return Component ? (
       <Component {...rest} />
     ) : (

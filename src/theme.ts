@@ -133,13 +133,13 @@ export const theme = createTheme({
           "&::placeholder": {
             color: "#ADAFB9",
             letterSpacing: "-1%",
-            fontSize: "16px",
+            fontSize: "14px",
             fontWeight: 400,
             opacity: 1,
           },
         },
         root: {
-          fontSize: "16px",
+          fontSize: "14px",
           fontWeight: 500,
           color: "#111827",
           lineHeight: "160%",

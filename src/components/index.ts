@@ -14,6 +14,7 @@ import HelperText from "./helper-text";
 import BackButton from "./back-button";
 import ContainedTextInput from "./textfields/contained";
 import ConfirmationModal from "./confirmation-modal";
+import CustomButton from "./custom-button";
 
 export {
   TextInput,
@@ -32,4 +33,5 @@ export {
   HelperText,
   BackButton,
   ConfirmationModal,
+  CustomButton,
 };

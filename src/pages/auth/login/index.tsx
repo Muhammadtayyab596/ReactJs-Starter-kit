@@ -1,25 +1,48 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
-import { Logo, TextInput } from "../../../components";
-import { useState, useContext } from "react";
+import { Box, Stack, Typography } from "@mui/material";
+import { useContext } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { UserContext, IUserContext } from "../../../context/user-context";
+import { CustomButton, Logo, TextInput } from "../../../components";
 import {
-  MessageContext,
   IMessageContext,
+  MessageContext,
 } from "../../../context/message-context";
-import api from "../../../services/request";
+import { IUserContext, UserContext } from "../../../context/user-context";
+import { AppDispatch } from "../../../store";
+import { loginUser } from "../../../store/slice/auth";
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Controller, useForm } from "react-hook-form";
+import * as yup from "yup";
+
+const defaultValues = {
+  password: "",
+  email: "",
+};
+
+const schema = yup.object().shape({
+  email: yup.string().email().required("Email is required"),
+  password: yup.string().min(6).required("Password is required"),
+});
 
 const Login = (): JSX.Element => {
   const navigate = useNavigate();
-  const { setUserData } = useContext(UserContext) as IUserContext;
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const dispatch = useDispatch<AppDispatch>();
 
+  const { setUserData } = useContext(UserContext) as IUserContext;
   const { showSnackbar } = useContext(MessageContext) as IMessageContext;
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues,
+    resolver: yupResolver(schema),
+  });
 
+  const onSubmit = async (data: { email: string; password: string }) => {
+    console.log(data);
     // setUserData({
     //   _id: `1`,
     //   name: "Admin",
@@ -28,21 +51,16 @@ const Login = (): JSX.Element => {
     //   isActive: true,
     //   profilePicURL: "",
     // });
-    // showSnackbar(`Welcome!`, "You are now logged in.", "success");
-
-    // navigate("/");
-    // api
-    //   .post("/login", { email, password })
-    //   .then((res) => {
-    //     const { data } = res;
-    //     setUserData(data);
-    //     navigate("/");
-    //   })
-    //   .catch((err) => {
-    //     console.log(err, "aaaaaaaaaaa");
-    //   });
-
-    await api.post("/api/auth/login", { email, password });
+    try {
+      const response = await dispatch(loginUser({ ...data }));
+      if (response.payload.success) {
+        setUserData({ ...response.payload.data });
+        showSnackbar(`Welcome!`, "You are now logged in.", "success");
+        localStorage.setItem("token", response.payload.token);
+      }
+    } catch (err) {
+      showSnackbar(`Error!`, "Invalid credentials.", "error");
+    }
   };
 
   return (
@@ -53,12 +71,12 @@ const Login = (): JSX.Element => {
       height={"100%"}
     >
       <Box sx={{ width: { xs: "95%", sm: "70%" }, p: { xs: 2, md: 0 } }}>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={1.5}>
             <Box sx={{ mb: 2, display: { md: "none", sm: "block" } }}>
               <Logo size={120} />
             </Box>
-            <Box>
+            <Box >
               <Typography
                 fontSize={{ md: "32px", xs: "22px" }}
                 fontWeight={600}
@@ -81,27 +99,44 @@ const Login = (): JSX.Element => {
           <Box sx={{ my: 2 }}>
             <Stack spacing={2}>
               <Box>
-                <TextInput
-                  label="Email"
-                  type="email"
-                  placeholder="hi@example.com"
-                  color="success"
-                  error={false}
-                  helperText={""}
-                  value={email}
-                  handleChangeValue={(val: string) => setEmail(val)}
+                <Controller
+                  name="email"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <TextInput
+                      label="Email"
+                      type="email"
+                      value={value}
+                      onChange={onChange}
+                      error={Boolean(errors.email)}
+                      placeholder="Enter your email address"
+                      {...(errors.email && {
+                        helperText: errors.email.message,
+                      })}
+                    />
+                  )}
                 />
               </Box>
+
               <Box>
-                <TextInput
-                  label="Password"
-                  placeholder="*************"
-                  color="success"
-                  type={"password"}
-                  error={false}
-                  helperText={""}
-                  value={password}
-                  handleChangeValue={(val: string) => setPassword(val)}
+                <Controller
+                  name="password"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <TextInput
+                      label="Password"
+                      type="password"
+                      value={value}
+                      onChange={onChange}
+                      placeholder="Enter your password"
+                      error={Boolean(errors.password)}
+                      {...(errors.password && {
+                        helperText: errors.password.message,
+                      })}
+                    />
+                  )}
                 />
               </Box>
               <Stack
@@ -122,21 +157,11 @@ const Login = (): JSX.Element => {
               </Stack>
             </Stack>
           </Box>
-          <Button
-            variant="contained"
-            fullWidth
-            sx={{
-              mt: 2,
-              py: 1.5,
-              fontSize: "16px",
-              fontWeight: 500,
-            }}
-            disabled={email === "" || password === ""}
+          <CustomButton
             type="submit"
-            color="primary"
-          >
-            Login
-          </Button>
+            sx={{ py: 2, fontSize: "16px" }}
+            label={"Login"}
+          />
         </form>
       </Box>
     </Stack>

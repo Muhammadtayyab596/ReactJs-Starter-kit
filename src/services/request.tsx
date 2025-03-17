@@ -1,7 +1,7 @@
 import Axios from "axios";
 import { showGlobalSnackbar } from "../context/hooks";
 
-const baseUrl = "http://localhost:3001/api/v1";
+const baseUrl = "http://localhost:4000/api/v1";
 const JSON_HEADER = "application/json";
 const REQ_TIMEOUT = 10 * 60 * 1000; // 10 minutes
 
@@ -29,21 +29,10 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response) {
-      showGlobalSnackbar(
-        "API Error",
-        error.response.data.message || "An error occurred",
-        "error"
-      );
-    } else if (error.request) {
-      showGlobalSnackbar(
-        "Network Error",
-        "No response from the server",
-        "error"
-      );
-    } else {
-      showGlobalSnackbar("Error", error.message, "error");
-    }
+    const errorMsg =
+      error?.response?.data?.message || error?.message || "An error occurred";
+    showGlobalSnackbar("Error", errorMsg, "error");
+
     return Promise.reject(error);
   }
 );

@@ -3,16 +3,16 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { loginRequest } from "../../../services/authServices";
 
 export interface initialState {
-  userDat: any;
+  userData: any;
   isLoading: boolean;
 }
 
 const initialState: initialState = {
-  userDat: null,
+  userData: null,
   isLoading: false,
 };
 
-export const login = createAsyncThunk(
+export const loginUser = createAsyncThunk(
   "auth/login",
   async (credentials: { email: string; password: string }) => {
     try {
@@ -29,14 +29,14 @@ export const counterSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(login.pending, (state) => {
+    builder.addCase(loginUser.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(login.fulfilled, (state, action) => {
-      state.userDat = action.payload;
+    builder.addCase(loginUser.fulfilled, (state, action) => {
+      state.userData = action.payload.data;
       state.isLoading = false;
     });
-    builder.addCase(login.rejected, (state) => {
+    builder.addCase(loginUser.rejected, (state) => {
       state.isLoading = false;
     });
   },
